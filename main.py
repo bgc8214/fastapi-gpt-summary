@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from openai import OpenAI
 from starlette.responses import StreamingResponse
 from dotenv import load_dotenv
+import uvicorn
 
 # 환경 변수 로드
 load_dotenv()
@@ -35,3 +36,7 @@ async def stream_summary(payload: dict):
             yield f"❌ Error: {str(e)}".encode("utf-8")
 
     return StreamingResponse(generate(), media_type="text/event-stream")
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
